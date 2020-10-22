@@ -1,0 +1,17 @@
+{
+  "name": "exemplo-api-para-aulas",
+  "description": "API para testes de REST",
+  "author": "Erick Eduardo Petrucelli <erick.petrucelli@fatectq.edu.br>",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-nedb-rest": "^1.2.6",
+    "nedb": "^1.8.0"
+  }
+}
