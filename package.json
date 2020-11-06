@@ -14,6 +14,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-nedb-rest": "^1.2.6",
     "nedb": "^1.8.0"

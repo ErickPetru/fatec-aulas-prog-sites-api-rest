@@ -1,8 +1,11 @@
 import express from 'express'
+import cors from 'cors'
 import nedb from 'nedb'
 import rest from 'express-nedb-rest'
 
 const app = new express()
+app.use(cors())
+
 const api = rest()
 
 const dbPosts = new nedb({ filename: 'posts.db', autoload: true })
