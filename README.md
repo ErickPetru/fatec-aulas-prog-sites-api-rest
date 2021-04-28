@@ -1,5 +1,5 @@
-# exemplo-api-para-aulas
+# fatec-aulas-prog-sites-api-rest
 
-> API para testes de REST
+> API REST para testes de integração com o front-end
 
-Este projeto construído para executar no Node.js utiliza os pacotes express, nedb e express-nedb-rest para construção quase automática de uma API REST a ser consumida conforme necessário com o protocolo HTTP.
+Este projeto foi construído para executar com Node.js utilizando os pacotes `express`, `nedb` e `express-nedb-rest` para construção (quase) automática de _endpoints_ de uma API REST a ser consumida conforme necessário pelo front-end através do protocolo HTTP.
