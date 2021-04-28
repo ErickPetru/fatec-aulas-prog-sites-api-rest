@@ -1,14 +1,14 @@
 {
-  "name": "exemplo-api-para-aulas",
-  "description": "API para testes de REST",
+  "name": "fatec-aulas-prog-sites-api-rest",
+  "description": "API REST para testes de integração com o front-end",
   "author": "Erick Eduardo Petrucelli <erick.petrucelli@fatectq.edu.br>",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "main": "index.js",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ErickPetru/exemplo-api-para-aulas"
+    "url": "https://github.com/ErickPetru/fatec-aulas-prog-sites-api-rest"
   },
   "scripts": {
     "start": "node index.js"
