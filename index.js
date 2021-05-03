@@ -1,22 +1,46 @@
-import express from 'express'
-import cors from 'cors'
-import nedb from 'nedb'
-import rest from 'express-nedb-rest'
+import cors from "cors";
+import express from "express";
+import posts from "./posts.js";
+import todos from "./todos.js";
+import users from "./users.js";
 
-const app = new express()
-app.use(cors())
+// Inicia a instância do servidor Express.
+const server = new express();
 
-const api = rest()
+// Bloqueia requisições CORS não iniciadas pela origem http://localhost:3000.
+server.use(
+  cors({
+    origin(origin, next) {
+      if (origin !== "http://localhost:3000")
+        return next(new Error("Unauthorized origin."), false);
+      return next(null, true);
+    },
+  })
+);
 
-const dbPosts = new nedb({ filename: 'posts.db', autoload: true })
-api.addDatastore('posts', dbPosts)
+// Auto-converte requisições 'application/x-www-form-urlencoded' em objetos dentro de 'req.body'.
+server.use(express.urlencoded({ extended: true }));
 
-const dbUsers = new nedb({ filename: 'users.db', autoload: true })
-api.addDatastore('users', dbUsers)
+// Auto-converte Strings JSON em objetos dentro de 'req.body'.
+server.use(express.json());
 
-const dbTodos = new nedb({ filename: 'todos.db', autoload: true })
-api.addDatastore('todos', dbTodos)
+// Mapeia as operações na entidade 'posts' com as rotas desejadas no servidor Express.
+server.get("/posts", posts.getAll);
+server.get("/posts/:id", posts.getById);
+server.post("/posts", posts.create);
+server.put("/posts/:id", posts.update);
+server.delete("/posts/:id", posts.remove);
 
-app.use('/', api)
+// Mapeia as operações na entidade 'todos' com as rotas desejadas no servidor Express.
+server.get("/todos", todos.getAll);
+server.get("/todos/:id", todos.getById);
+server.post("/todos", todos.create);
+server.put("/todos/:id", todos.update);
+server.delete("/todos/:id", todos.remove);
 
-app.listen(8080, () => console.log('Listening at http://localhost:8080'))
+// Mapeia as operações na entidade 'users' com as rotas desejadas no servidor Express.
+server.get("/users/:email", users.exists);
+server.post("/users/register", users.register);
+server.post("/users/login", users.login);
+
+server.listen(8080, () => console.log("Listening at http://localhost:8080"));
