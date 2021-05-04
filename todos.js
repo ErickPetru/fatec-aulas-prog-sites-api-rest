@@ -1,6 +1,6 @@
 import nedb from "nedb-promises";
 
-export default function configure(server) {
+export default function configure(app, socket) {
   const todos = nedb.create({ filename: "todos.db", autoload: true });
 
   const getAll = async (_req, res) => {
@@ -15,8 +15,9 @@ export default function configure(server) {
   };
 
   const create = async (req, res) => {
-    const payload = { text: req.body.text, createdAt: new Date() };
+    const payload = { text: req.body.text, done: false, createdAt: new Date() };
     const result = await todos.insert(payload);
+    socket.emit("todo-created", result);
     res.status(201).send(result);
   };
 
@@ -34,18 +35,20 @@ export default function configure(server) {
       { $set: payload },
       { returnUpdatedDocs: true }
     );
+    socket.emit("todo-updated", result);
     res.status(200).send(result);
   };
 
   const remove = async (req, res) => {
     const query = { _id: req.params.id };
     await todos.remove(query);
+    socket.emit("todo-removed", query);
     res.status(204).send();
   };
 
-  server.get("/todos", getAll);
-  server.get("/todos/:id", getById);
-  server.post("/todos", create);
-  server.put("/todos/:id", update);
-  server.delete("/todos/:id", remove);
-};
+  app.get("/todos", getAll);
+  app.get("/todos/:id", getById);
+  app.post("/todos", create);
+  app.put("/todos/:id", update);
+  app.delete("/todos/:id", remove);
+}

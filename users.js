@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import nedb from "nedb-promises";
 import auth from "./auth.js";
 
-export default function configure(server) {
+export default function configure(app) {
   const users = nedb.create({ filename: "users.db", autoload: true });
 
   const getCurrent = async (req, res) => {
@@ -42,8 +42,8 @@ export default function configure(server) {
     }
   };
 
-  server.get("/users/current", auth, getCurrent);
-  server.get("/users/exists/:email", exists);
-  server.post("/users/register", register);
-  server.post("/users/login", login);
+  app.get("/users/current", auth, getCurrent);
+  app.get("/users/exists/:email", exists);
+  app.post("/users/register", register);
+  app.post("/users/login", login);
 }

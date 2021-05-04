@@ -1,7 +1,7 @@
 import nedb from "nedb-promises";
 import auth from "./auth.js";
 
-export default function configure(server) {
+export default function configure(app) {
   const posts = nedb.create({ filename: "posts.db", autoload: true });
 
   const getAll = async (_req, res) => {
@@ -57,9 +57,9 @@ export default function configure(server) {
     res.status(204).send();
   };
 
-  server.get("/posts", getAll);
-  server.get("/posts/:id", getById);
-  server.post("/posts", auth, create);
-  server.put("/posts/:id", auth, update);
-  server.delete("/posts/:id", auth, remove);
+  app.get("/posts", getAll);
+  app.get("/posts/:id", getById);
+  app.post("/posts", auth, create);
+  app.put("/posts/:id", auth, update);
+  app.delete("/posts/:id", auth, remove);
 }
