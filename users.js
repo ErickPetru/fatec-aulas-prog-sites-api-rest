@@ -1,7 +1,14 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import nedb from "nedb-promises";
 
 const users = nedb.create({ filename: "users.db", autoload: true });
+
+const getCurrent = async (req, res) => {
+  const query = { _id: req.userId };
+  const { password, ...result } = await users.findOne(query);
+  res.status(200).send(result);
+};
 
 const exists = async (req, res) => {
   const query = { email: req.params.email };
@@ -17,29 +24,24 @@ const register = async (req, res) => {
     password: hash,
     createdAt: new Date(),
   };
-  const result = await users.insert(payload);
-  res.status(201).send({
-    _id: result._id,
-    email: result.email,
-    createdAt: result.createdAt,
-  });
+  const { password, ...result } = await users.insert(payload);
+  res.status(201).send(result);
 };
 
 const login = async (req, res) => {
   const query = { email: req.body.email };
   const result = await users.findOne(query);
   if (result && (await bcrypt.compare(req.body.password, result.password))) {
-    res.status(200).send({
-      _id: result._id,
-      email: result.email,
-      createdAt: result.createdAt,
-    });
+    const secret = process.env.JWT_SECRET;
+    const token = jwt.sign({ id: result._id }, secret, { expiresIn: "1h" });
+    res.status(200).send({ token });
   } else {
     res.status(401).send();
   }
 };
 
 export default {
+  getCurrent,
   exists,
   register,
   login,
