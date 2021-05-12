@@ -15,7 +15,12 @@ export default function configure(app, socket) {
   };
 
   const create = async (req, res) => {
-    const payload = { text: req.body.text, done: false, createdAt: new Date() };
+    const payload = {
+      text: req.body.text,
+      done: false,
+      locale: req.body.locale || 'pt',
+      createdAt: new Date()
+    };
     const result = await todos.insert(payload);
     socket.emit("todo-created", result);
     res.status(201).send(result);
